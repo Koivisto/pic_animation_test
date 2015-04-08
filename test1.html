@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<head>
+<title>pic animation test</title>
+<meta charset="utf-8"/>
+
+<style type="text/css">
+
+div{
+	margin-bottom: 300px;
+}
+#animationDiv{
+	position: relative;
+	top: 0px;
+	left: 0px;
+
+}
+.animationframe{
+	display: none;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+#first{
+	display: block;
+	position: relative;
+	top: 0px;
+	left: 0px;
+}
+
+</style>
+
+<!--jQuery-->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+</head>
+<body>
+	<div>moi</div>
+	<div>tässä on</div>
+
+	<div id="animationDiv">
+		<img src="first.jpeg" id="first" class="animationframe">
+		<img src="second.jpeg" id="second" class="animationframe">
+		<img src="third.jpeg" id="third" class="animationframe">
+		<img src="last.jpeg" id="last" class="animationframe">
+	</div>
+
+	<div>testi</div>
+	<div>joka loppui. (Kissakuvat vaihtui, toivottavasti.)</div>
+
+<!--scroll detection-->
+<script type="text/javascript">
+
+var totalHeight = $(window).height();
+var animAmount = 0.5;//of the window height
+var animAreaHeight = totalHeight * animAmount;
+var animStep = animAreaHeight / 4;
+
+//Animation starts only when it is visible on the screen
+var animationDivTop = $( "#animationDiv" ).offset().top;
+//used to ensure correct location on screen
+var animTop = animationDivTop - totalHeight * animAmount *1.5; //0.5;
+
+$(window).scroll(function (event) {
+    //the scroll amount
+    var scroll = $(window).scrollTop();
+	//"animates" images according to animStep
+	if     ( scroll < animStep * 2 +animTop) hideAllBut("first");
+	else if( scroll > animStep * 2 +animTop 
+		  && scroll < animStep * 3 +animTop) hideAllBut("second");
+	else if( scroll > animStep * 3 +animTop 
+		  && scroll < animStep * 4 +animTop) hideAllBut("third");
+	else hideAllBut("last");
+});
+
+/*hides all animation div images but the one that id is in parameter*/
+function hideAllBut(id){
+	//hides elements that should not be visible
+	$( "#animationDiv" ).find( "img" ).each(function() {
+    	if ($( this ).attr('id') != id) $( this ).fadeOut(200);
+	});
+
+	//shows element that should
+	var visibleElement = $("#"+id);
+	if ( visibleElement.css('display') == "none") visibleElement.fadeIn(200); 
+
+}
+
+</script>
+
+</body>
